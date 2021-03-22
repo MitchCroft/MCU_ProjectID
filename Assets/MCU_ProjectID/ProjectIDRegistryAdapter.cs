@@ -1,4 +1,5 @@
-﻿namespace MCU.ProjectID {
+﻿#if MCU_REG
+namespace MCU.ProjectID {
     /// <summary>
     /// Provide access to the Project ID data elements via the adapter interface
     /// </summary>
@@ -22,3 +23,4 @@
         public static int GetProjectIDVersionHash() { return ProjectIDSettings.Settings.VersionHash; }
     }
 }
+#endif
