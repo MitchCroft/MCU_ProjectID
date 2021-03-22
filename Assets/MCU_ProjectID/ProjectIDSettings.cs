@@ -86,6 +86,23 @@ namespace MCU.ProjectID {
             set { projectID = (value == null ? string.Empty : value); }
         }
 
+        /// <summary>
+        /// Retrieve a Hash ID that combines <see cref="ProjectID"/> and <see cref="Application.version"/>
+        /// </summary>
+        /// <remarks>
+        /// This can be used to differentiate between different versions of the same project as needed
+        /// </remarks>
+        public int VersionHash {
+            get {
+                unchecked {
+                    int hash = 17;
+                    hash = hash * 31 + projectID.GetHashCode();
+                    hash = hash * 31 + Application.version.GetHashCode();
+                    return hash;
+                }
+            }
+        }
+
         /*----------Functions----------*/
         //PUBLIC
 
