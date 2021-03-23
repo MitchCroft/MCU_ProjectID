@@ -41,7 +41,7 @@
   "scopedRegistries": [
     {
       "name": "Mitch Croft Unity (MCU)",
-      "url": "http://www.mitchcroft.games:4873/",
+      "url": "http://vps.mitchcroft.games:4873/",
       "scopes": [
         "games.mitchcroft"
       ]
