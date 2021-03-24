@@ -15,15 +15,6 @@ namespace MCU.ProjectID {
     [CreateAssetMenu(menuName = "MCU/Project ID Settings")]
     public sealed class ProjectIDSettings : ScriptableObject {
         /*----------Variables----------*/
-        //CONST
-
-#if UNITY_EDITOR
-        /// <summary>
-        /// The default location that will have an asset created if none could be found for use
-        /// </summary>
-        private const string DEFAULT_SETTINGS_LOCATION = "Assets/Resources/MCU/ProjectIDSettings.asset";
-#endif
-
         //INVISIBLE
 
         /// <summary>
@@ -61,9 +52,29 @@ namespace MCU.ProjectID {
                         // Create a new instance of the asset
                         instance = ScriptableObject.CreateInstance<ProjectIDSettings>();
 
-                        // Store the asset within the project for re-use
-                        Directory.CreateDirectory(Path.GetDirectoryName(DEFAULT_SETTINGS_LOCATION));
-                        AssetDatabase.CreateAsset(instance, DEFAULT_SETTINGS_LOCATION);
+#if MCU_REG
+                        // Look for the anticipated directory location 
+                        string path = Registry.MCURegistry.Editor.FindAssetDirectory("MCU/Resources");
+
+                        // If nothing could be found, try different patterns
+                        if (path == null) {
+                            // Look for the package root directory
+                            path = Registry.MCURegistry.Editor.FindAssetDirectory("MCU");
+
+                            // If the root directory could be found, add the resources to it for processing
+                            if (path != null) path += "/Resources";
+
+                            // Otherwise, just assign the default location
+                            else path = "Assets/MCU/Resources";
+                        }
+#else
+                        // Nothing fancy, just use the anticipated root location
+                        string path = "Assets/MCU/Resources";
+#endif
+
+                        // Create the asset that is to be displayed
+                        Directory.CreateDirectory(path);
+                        AssetDatabase.CreateAsset(instance, path + "/ProjectIDSettings.asset");
                         AssetDatabase.SaveAssets();
 
                         // If the editor isn't running, save and refresh the assets
@@ -71,7 +82,7 @@ namespace MCU.ProjectID {
                             AssetDatabase.Refresh();
                     }
 #endif
-                }
+                    }
 
                 // There must be an instance to return, otherwise there will be a problem
                 return instance ?? throw new Exception("No Project ID Settings asset could be identified for use");
