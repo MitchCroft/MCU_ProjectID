@@ -3,7 +3,7 @@ namespace MCU.ProjectID {
     /// <summary>
     /// Provide access to the Project ID data elements via the adapter interface
     /// </summary>
-    [Registry.MCUAdapter("project_id", "1.0.0", "PROJ_ID")]
+    [Registry.MCUAdapter("project_id", "1.0.1", "PROJ_ID")]
     public static class ProjectIDRegistryAdapter {
         /*----------Functions----------*/
         //PUBLIC

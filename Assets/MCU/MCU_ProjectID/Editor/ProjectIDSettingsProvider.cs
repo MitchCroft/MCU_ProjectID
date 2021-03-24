@@ -116,8 +116,9 @@ namespace MCU.ProjectID {
                 return null;
 
             // Capture the values that will be used to display the elements
-            SerializedObject serialSettings = new SerializedObject(ProjectIDSettings.Settings);
-            SerializedProperty projectIDProp = serialSettings.FindProperty("projectID");
+            ProjectIDSettings idSettings = null;
+            SerializedObject serialSettings = null;
+            SerializedProperty projectIDProp = null;
             bool isUnlocked = false;
 
             // Create the provider object that will be displayed
@@ -125,8 +126,26 @@ namespace MCU.ProjectID {
             {
                 label = Styles.projectIDLabel.text,
                 guiHandler = (searchContext) => {
+                    //Ensure that there is an object to be displayed
+                    if (!idSettings) {
+                        // Get the settings object to be shown
+                        idSettings = ProjectIDSettings.Settings;
+
+                        // If there was a settings object to be found, grab the required values
+                        if (idSettings) {
+                            serialSettings = new SerializedObject(idSettings);
+                            projectIDProp = serialSettings.FindProperty("projectID");
+                        }
+
+                        // Otherwise, there can't be anything displayed
+                        else {
+                            EditorGUILayout.LabelField("Unable to load Project ID Settings asset for modification", EditorStyles.boldLabel);
+                            return;
+                        }
+                    }
+
                     // Update the serial representation in case of script modifications
-                    serialSettings.UpdateIfRequiredOrScript();
+                    else serialSettings.UpdateIfRequiredOrScript();
 
                     // Display these settings along a single line
                     EditorGUILayout.BeginHorizontal(); {
