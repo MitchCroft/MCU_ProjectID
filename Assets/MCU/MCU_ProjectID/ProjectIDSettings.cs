@@ -69,7 +69,7 @@ namespace MCU.ProjectID {
                         }
 #else
                         // Nothing fancy, just use the anticipated root location
-                        string path = "Assets/MCU/Resources";
+                        string path = $"Assets/{nameof(MCU)}/Resources";
 #endif
 
                         // Create the asset that is to be displayed
