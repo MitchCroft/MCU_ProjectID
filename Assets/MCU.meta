@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 36c7ad868ff917846b47547e86fd0e51
+labels:
+- MCU
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
