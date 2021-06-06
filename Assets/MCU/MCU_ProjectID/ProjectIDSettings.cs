@@ -54,18 +54,18 @@ namespace MCU.ProjectID {
 
 #if MCU_REG
                         // Look for the anticipated directory location 
-                        string path = Registry.MCURegistry.Editor.FindAssetDirectory("MCU/Resources");
+                        string path = Registry.MCURegistry.Editor.FindAssetDirectory($"{nameof(MCU)}/Resources");
 
                         // If nothing could be found, try different patterns
                         if (path == null) {
                             // Look for the package root directory
-                            path = Registry.MCURegistry.Editor.FindAssetDirectory("MCU");
+                            path = Registry.MCURegistry.Editor.FindAssetDirectory(nameof(MCU));
 
                             // If the root directory could be found, add the resources to it for processing
                             if (path != null) path += "/Resources";
 
                             // Otherwise, just assign the default location
-                            else path = "Assets/MCU/Resources";
+                            else path = $"Assets/{nameof(MCU)}/Resources";
                         }
 #else
                         // Nothing fancy, just use the anticipated root location
@@ -76,6 +76,14 @@ namespace MCU.ProjectID {
                         Directory.CreateDirectory(path);
                         AssetDatabase.CreateAsset(instance, path + "/ProjectIDSettings.asset");
                         AssetDatabase.SaveAssets();
+
+#if MCU_REG
+                        // Add the labels for this package to the new asset
+                        Registry.MCURegistry.Editor.AddLabelsFromPackage(
+                            instance,
+                            Registry.MCURegistry.Editor.GetPackageFromType(instance)
+                        );
+#endif
 
                         // If the editor isn't running, save and refresh the assets
                         if (!EditorApplication.isPlaying) 
